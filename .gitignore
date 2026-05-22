@@ -7,6 +7,7 @@ coverage/
 .vscode/
 .idea/
 
-# Không đẩy tài liệu .md
+# Không đẩy tài liệu .md (trừ database/)
 *.md
 docs/
+!database/*.md
