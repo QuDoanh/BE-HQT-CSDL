@@ -1,0 +1,12 @@
+node_modules/
+.env
+*.log
+.DS_Store
+dist/
+coverage/
+.vscode/
+.idea/
+
+# Không đẩy tài liệu .md
+*.md
+docs/
