@@ -7,7 +7,9 @@ coverage/
 .vscode/
 .idea/
 
-# Không đẩy tài liệu .md (trừ database/)
+# Không đẩy module docs; cho phép README + hướng dẫn FE + database/
 *.md
 docs/
 !database/*.md
+!/README.md
+!/FRONTEND-INTEGRATION-GUIDE.md
