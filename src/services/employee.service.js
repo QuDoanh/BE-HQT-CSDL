@@ -136,6 +136,44 @@ export async function update(employeeId, data) {
   return await getById(employeeId)
 }
 
+/** Nhân viên tự sửa hồ sơ — chỉ fullName, phone, email */
+export async function updateProfile(employeeId, data) {
+  const current = await queryOne(
+    'SELECT EmployeeId FROM dbo.Employee WHERE EmployeeId = @id AND IsActive = 1',
+    { id: employeeId }
+  )
+  if (!current) {
+    throw new AppError('Không tìm thấy nhân viên', 404, 'EMPLOYEE_NOT_FOUND')
+  }
+
+  if (data.email) {
+    const dup = await queryOne(
+      'SELECT 1 AS x FROM dbo.Employee WHERE Email = @e AND EmployeeId <> @id',
+      { e: data.email, id: employeeId }
+    )
+    if (dup) {
+      throw new AppError('Email đã được sử dụng', 409, 'EMAIL_EXISTS')
+    }
+  }
+
+  const sets = []
+  const params = { id: employeeId }
+  if (data.fullName !== undefined) { sets.push('FullName = @fullName'); params.fullName = data.fullName }
+  if (data.phone !== undefined) { sets.push('Phone = @phone'); params.phone = data.phone }
+  if (data.email !== undefined) { sets.push('Email = @email'); params.email = data.email }
+
+  if (sets.length === 0) {
+    throw new AppError('Không có thông tin nào để cập nhật', 400, 'NOTHING_TO_UPDATE')
+  }
+
+  await query(
+    `UPDATE dbo.Employee SET ${sets.join(', ')} WHERE EmployeeId = @id`,
+    params
+  )
+
+  return await getById(employeeId)
+}
+
 export async function changePassword(employeeId, data, requestUser) {
   const emp = await queryOne(
     'SELECT EmployeeId, PasswordHash FROM dbo.Employee WHERE EmployeeId = @id AND IsActive = 1',

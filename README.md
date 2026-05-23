@@ -150,6 +150,7 @@ DELETE /api/medicines/:id           ← Xóa (thường là soft-delete IsActive
 POST   /api/auth/login              ← Đăng nhập → trả JWT
 POST   /api/auth/logout             ← Đăng xuất (invalidate token phía FE)
 GET    /api/auth/me                 ← Lấy thông tin user đang đăng nhập
+PATCH  /api/auth/me                 ← Cập nhật hồ sơ cá nhân (fullName, phone, email)
 ```
 
 ### Employee

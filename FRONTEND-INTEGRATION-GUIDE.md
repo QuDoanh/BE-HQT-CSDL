@@ -150,6 +150,7 @@ export const authService = {
   login: (username, password) => api.post('/auth/login', { username, password }),
   logout: () => api.post('/auth/logout'),
   getMe: () => api.get('/auth/me'),
+  updateMe: (data) => api.patch('/auth/me', data),
 }
 ```
 
@@ -442,6 +443,7 @@ Khi xoá `InventoryAlertContext`, đồng thời xoá:
 |----------|-------------|--------|------|
 | **Login** | `/auth/login` | POST | – |
 | **Profile** — load | `/auth/me` | GET | Auth |
+| **Profile** — sửa thông tin | `/auth/me` | PATCH | Auth (fullName, phone, email) |
 | **Profile** — đổi MK | `/employees/:id/password` | PATCH | Auth (chính mình) |
 | **AdminHome** — KPI | gộp `/reports/profit-loss` + `/reports/inventory-value` | GET | ADMIN |
 | **AdminRevenueReport** — biểu đồ | `/reports/revenue?groupBy=day` | GET | ADMIN |
@@ -852,7 +854,7 @@ try {
 | Phạm vi | Endpoint |
 |---------|----------|
 | **ADMIN only** | `/employees/*` (trừ đổi MK của chính mình), `/medicines POST/PATCH/DELETE`, `/suppliers POST/PATCH/DELETE`, `/manufacturers POST/PATCH`, `/categories POST/PATCH/DELETE`, `/customers GET`, `/purchase-receipts/*`, `/sales-returns/*`, `/stock-writeoffs POST/GET`, `/sales-invoices/:id/cancel`, `/alerts/:id/resolve|reject`, `/reports/*` |
-| **STAFF + ADMIN** | `/auth/me`, `/medicines GET`, `/customers/lookup`, `/sales-invoices GET/POST` (STAFF chỉ thấy của mình), `/stock-writeoffs/expiring`, `/alerts GET` (STAFF chỉ thấy PENDING), `/notifications/*`, `/units GET`, `/categories GET`, `/manufacturers GET` |
+| **STAFF + ADMIN** | `/auth/me` GET/PATCH, `/medicines GET`, `/customers/lookup`, `/sales-invoices GET/POST` (STAFF chỉ thấy của mình), `/stock-writeoffs/expiring`, `/alerts GET` (STAFF chỉ thấy PENDING), `/notifications/*`, `/units GET`, `/categories GET`, `/manufacturers GET` |
 
 Sidebar nên ẩn các link không khớp role. Hiện tại `Sidebar.jsx` đã có logic theo role — chỉ cần cập nhật menu cho đúng phân quyền BE.
 
@@ -950,8 +952,8 @@ Sidebar nên ẩn các link không khớp role. Hiện tại `Sidebar.jsx` đã 
 
 ### `Profile.jsx`
 - [ ] Load info: `authService.getMe()`
+- [ ] Sửa fullName/email/phone: `authService.updateMe({ fullName, phone, email })` — ADMIN và STAFF đều dùng được
 - [ ] Đổi MK: `employeeService.changePassword(myId, currentPassword, newPassword)`
-- [ ] (Optional) Sửa fullName/email/phone: `employeeService.update(myId, { ... })` — yêu cầu BE cho phép self-edit, hiện BE chỉ cho ADMIN PATCH. **Cần confirm hoặc bỏ tính năng này nếu user là STAFF.**
 
 ---
 

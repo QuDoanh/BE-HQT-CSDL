@@ -7,5 +7,6 @@ const router = Router()
 router.post('/login', authController.login)
 router.post('/logout', authController.logout)
 router.get('/me', authenticate, authController.getMe)
+router.patch('/me', authenticate, authController.updateMe)
 
 export default router
