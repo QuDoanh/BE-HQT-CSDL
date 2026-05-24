@@ -92,6 +92,18 @@ export async function create(data) {
   return await getById(newId)
 }
 
+/** Đăng ký tự do — luôn tạo vai trò STAFF, không phải ADMIN */
+export async function registerSelf(data) {
+  return create({
+    fullName: data.fullName,
+    phone: data.phone || null,
+    email: data.email,
+    username: data.username,
+    password: data.password,
+    roleId: 'STAFF',
+  })
+}
+
 export async function update(employeeId, data) {
   const current = await queryOne('SELECT IsRoot FROM dbo.Employee WHERE EmployeeId = @id', { id: employeeId })
   if (!current) {

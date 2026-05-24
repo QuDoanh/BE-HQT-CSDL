@@ -147,6 +147,7 @@ Tạo folder `src/services/` và các file dưới đây:
 import api from '@/lib/apiClient'
 
 export const authService = {
+  register: (data) => api.post('/auth/register', data),
   login: (username, password) => api.post('/auth/login', { username, password }),
   logout: () => api.post('/auth/logout'),
   getMe: () => api.get('/auth/me'),
@@ -351,7 +352,11 @@ const handleLogin = async (formData) => {
 
 ### File `src/pages/auth/Register.jsx`
 
-Bỏ trang Register (hoặc disable). **BE không có endpoint công khai để register** — chỉ ADMIN mới tạo được nhân viên qua `POST /api/employees`.
+Nhân viên **tự đăng ký** qua `POST /api/auth/register` (public). Luôn tạo vai trò **STAFF** — không đăng ký được ADMIN.
+
+Body: `{ fullName, username, email, phone?, password, confirmPassword }` — `phone` format `0xxxxxxxxx` (10 số).
+
+Sau đăng ký thành công → chuyển `/login`. ADMIN vẫn có thể tạo NV (kể cả ADMIN) qua `POST /api/employees`.
 
 ### File `src/components/common/ProtectedRoute.jsx`
 
@@ -871,8 +876,12 @@ Sidebar nên ẩn các link không khớp role. Hiện tại `Sidebar.jsx` đã 
 - [ ] Bỏ phần "Quên mật khẩu" mock (BE chưa có)
 
 ### `Register.jsx`
-- [ ] **Disable** hoặc xoá — BE không cho phép register công khai
-- [ ] Hoặc: ẩn link đến `/register` trong Login
+- [ ] Form: họ tên, username, email, SĐT, MK, nhập lại MK
+- [ ] Submit → `authService.register(...)` → toast/alert → `navigate('/login')`
+- [ ] Giữ link "Đăng ký" từ Login
+
+### `Employees.jsx` (ADMIN đặt lại mật khẩu)
+- [ ] Nút "Đặt mật khẩu" / modal → `PATCH /api/employees/:id/password` body `{ newPassword }` (không gửi `currentPassword` khi ADMIN)
 
 ### `ProtectedRoute.jsx`
 - [ ] Kiểm tra cả `token` lẫn `user`

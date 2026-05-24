@@ -147,6 +147,7 @@ DELETE /api/medicines/:id           ← Xóa (thường là soft-delete IsActive
 
 ### Auth
 ```
+POST   /api/auth/register           ← Đăng ký tài khoản (public, luôn tạo STAFF)
 POST   /api/auth/login              ← Đăng nhập → trả JWT
 POST   /api/auth/logout             ← Đăng xuất (invalidate token phía FE)
 GET    /api/auth/me                 ← Lấy thông tin user đang đăng nhập
@@ -157,9 +158,9 @@ PATCH  /api/auth/me                 ← Cập nhật hồ sơ cá nhân (fullNam
 ```
 GET    /api/employees               ← [ADMIN] Danh sách nhân viên
 GET    /api/employees/:id
-POST   /api/employees               ← [ADMIN] Tạo nhân viên mới
+POST   /api/employees               ← [ADMIN] Tạo nhân viên (chọn ADMIN hoặc STAFF)
 PATCH  /api/employees/:id           ← [ADMIN] Cập nhật (bao gồm đổi role)
-PATCH  /api/employees/:id/password  ← Đổi mật khẩu (chính mình hoặc ADMIN)
+PATCH  /api/employees/:id/password  ← Đổi MK (tự đổi cần MK cũ; ADMIN đặt MK mới cho NV)
 DELETE /api/employees/:id           ← [ADMIN] Soft-delete (IsActive=0)
 ```
 

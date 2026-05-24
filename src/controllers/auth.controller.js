@@ -17,6 +17,54 @@ const updateMeSchema = z.object({
   email: z.string().email('Email không hợp lệ').optional(),
 })
 
+const registerSchema = z
+  .object({
+    fullName: z.string().min(2, 'Họ tên tối thiểu 2 ký tự').max(100),
+    username: z
+      .string()
+      .min(3, 'Tên đăng nhập tối thiểu 3 ký tự')
+      .max(50)
+      .regex(/^[a-zA-Z0-9_]+$/, 'Tên đăng nhập chỉ chứa chữ, số, gạch dưới'),
+    email: z.string().email('Email không hợp lệ'),
+    phone: z.string().regex(phoneRegex, 'Số điện thoại phải 10 số, bắt đầu bằng 0').optional(),
+    password: z.string().min(6, 'Mật khẩu tối thiểu 6 ký tự'),
+    confirmPassword: z.string().min(6, 'Vui lòng nhập lại mật khẩu'),
+  })
+  .refine((d) => d.password === d.confirmPassword, {
+    message: 'Mật khẩu nhập lại không khớp',
+    path: ['confirmPassword'],
+  })
+
+function normalizePhone(input) {
+  if (!input) return undefined
+  const s = String(input).trim().replace(/\s/g, '')
+  if (s.startsWith('+84')) return '0' + s.slice(3)
+  if (s.startsWith('84') && s.length >= 11) return '0' + s.slice(2)
+  return s
+}
+
+export const register = catchAsync(async (req, res) => {
+  const parsed = registerSchema.safeParse(req.body)
+  if (!parsed.success) {
+    throw new AppError(parsed.error.issues[0].message, 400, 'VALIDATION_ERROR')
+  }
+
+  const { fullName, username, email, password, phone } = parsed.data
+  const result = await authService.register({
+    fullName,
+    username,
+    email,
+    password,
+    phone: normalizePhone(phone),
+  })
+
+  res.status(201).json({
+    success: true,
+    message: 'Đăng ký tài khoản thành công. Vui lòng đăng nhập.',
+    data: result,
+  })
+})
+
 export const login = catchAsync(async (req, res) => {
   const parsed = loginSchema.safeParse(req.body)
   if (!parsed.success) {

@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { queryOne } from '../config/db.js'
 import AppError from '../utils/AppError.js'
+import * as employeeService from './employee.service.js'
 
 export async function login(username, password) {
   const emp = await queryOne(
@@ -39,6 +40,16 @@ export async function login(username, password) {
       role: emp.RoleId,
       isRoot: !!emp.IsRoot,
     },
+  }
+}
+
+export async function register(data) {
+  const employee = await employeeService.registerSelf(data)
+  return {
+    employeeId: employee.employeeId,
+    fullName: employee.fullName,
+    username: employee.username,
+    role: employee.roleId,
   }
 }
 
