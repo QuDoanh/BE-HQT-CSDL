@@ -215,9 +215,9 @@ PATCH  /api/sales-invoices/:id/cancel ← Hủy HĐ (hoàn tồn lô)
 
 ### Sales Return (Trả hàng)
 ```
-GET    /api/sales-returns           ← Danh sách phiếu trả
-GET    /api/sales-returns/:id
-POST   /api/sales-returns           ← Tạo phiếu trả (transaction: hoàn tồn lô gốc)
+GET    /api/sales-returns           ← [ADMIN] Danh sách phiếu trả
+GET    /api/sales-returns/:id       ← [ADMIN] Chi tiết phiếu trả
+POST   /api/sales-returns           ← [ADMIN/STAFF] Tạo phiếu trả (transaction: hoàn tồn lô gốc)
 ```
 
 ### Stock Write-Off (Hủy hàng hết hạn)
@@ -320,6 +320,7 @@ COMMIT
 | Tạo hóa đơn bán hàng | ✅ | ✅ |
 | Xem hóa đơn của mình | ✅ | ✅ |
 | Xem tất cả hóa đơn | ✅ | ❌ |
+| Tạo phiếu trả hàng | ✅ | ✅ |
 | Tạo/sửa thuốc | ✅ | ❌ |
 | Nhập hàng | ✅ | ❌ |
 | Hủy hàng hết hạn | ✅ | ❌ |

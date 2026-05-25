@@ -5,11 +5,13 @@ import { requireRole } from '../middleware/requireRole.js'
 
 const router = Router()
 
-// tra hang la nghiep vu nhay cam -> chi ADMIN duoc lam
-router.use(authenticate, requireRole('ADMIN'))
+router.use(authenticate)
 
-router.get('/', ctrl.getAll)
-router.get('/:id', ctrl.getById)
-router.post('/', ctrl.create)
+// Nhan vien tai quay co the lap phieu tra hang khi khach mang hang den hoan.
+router.post('/', requireRole('ADMIN', 'STAFF'), ctrl.create)
+
+// Danh sach/chi tiet phieu tra van gioi han ADMIN de tranh mo rong du lieu tra hang.
+router.get('/', requireRole('ADMIN'), ctrl.getAll)
+router.get('/:id', requireRole('ADMIN'), ctrl.getById)
 
 export default router

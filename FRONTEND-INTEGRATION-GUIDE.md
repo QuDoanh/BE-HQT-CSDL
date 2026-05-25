@@ -474,7 +474,7 @@ Khi xoá `InventoryAlertContext`, đồng thời xoá:
 | **Orders (admin)** — list | `/sales-invoices` | GET | Auth |
 | **Orders** — chi tiết | `/sales-invoices/:id` | GET | Auth |
 | **Orders** — hủy | `/sales-invoices/:id/cancel` | PATCH | ADMIN |
-| **Orders** — trả hàng | `/sales-returns` | POST | ADMIN |
+| **Orders** — trả hàng | `/sales-returns` | POST | STAFF + ADMIN |
 | **Sales (POS)** — tìm KH theo SĐT | `/customers/lookup` | POST | Auth |
 | **Sales (POS)** — thanh toán | `/sales-invoices` | POST | Auth |
 | **(Mới)** — Master data | `/units`, `/categories`, `/suppliers`, `/manufacturers` | GET / POST / PATCH | Auth / ADMIN |
@@ -858,8 +858,8 @@ try {
 
 | Phạm vi | Endpoint |
 |---------|----------|
-| **ADMIN only** | `/employees/*` (trừ đổi MK của chính mình), `/medicines POST/PATCH/DELETE`, `/suppliers POST/PATCH/DELETE`, `/manufacturers POST/PATCH`, `/categories POST/PATCH/DELETE`, `/customers GET`, `/purchase-receipts/*`, `/sales-returns/*`, `/stock-writeoffs POST/GET`, `/sales-invoices/:id/cancel`, `/alerts/:id/resolve|reject`, `/reports/*` |
-| **STAFF + ADMIN** | `/auth/me` GET/PATCH, `/medicines GET`, `/customers/lookup`, `/sales-invoices GET/POST` (STAFF chỉ thấy của mình), `/stock-writeoffs/expiring`, `/alerts GET` (STAFF chỉ thấy PENDING), `/notifications/*`, `/units GET`, `/categories GET`, `/manufacturers GET` |
+| **ADMIN only** | `/employees/*` (trừ đổi MK của chính mình), `/medicines POST/PATCH/DELETE`, `/suppliers POST/PATCH/DELETE`, `/manufacturers POST/PATCH`, `/categories POST/PATCH/DELETE`, `/customers GET`, `/purchase-receipts/*`, `/sales-returns GET`, `/sales-returns/:id GET`, `/stock-writeoffs POST/GET`, `/sales-invoices/:id/cancel`, `/alerts/:id/resolve|reject`, `/reports/*` |
+| **STAFF + ADMIN** | `/auth/me` GET/PATCH, `/medicines GET`, `/customers/lookup`, `/sales-invoices GET/POST` (STAFF chỉ thấy của mình), `/sales-returns POST`, `/stock-writeoffs/expiring`, `/alerts GET` (STAFF chỉ thấy PENDING), `/notifications/*`, `/units GET`, `/categories GET`, `/manufacturers GET` |
 
 Sidebar nên ẩn các link không khớp role. Hiện tại `Sidebar.jsx` đã có logic theo role — chỉ cần cập nhật menu cho đúng phân quyền BE.
 
